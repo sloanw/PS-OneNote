@@ -1,6 +1,7 @@
 function New-OneNoteSection {
 	[CmdletBinding()]
 	Param(
+		[Parameter(ValueFromPipeline = $True)]
 		[xml]$Hierarchy,
 		[string]$Section
 	)
@@ -26,6 +27,7 @@ function Get-OneNoteHierarchy {
 function Set-OneNoteHierarchy {
 	[CmdletBinding()]
 	Param(
+		[Parameter(ValueFromPipeline = $True)]
 		[xml]$Hierarchy
 	)
 
@@ -62,6 +64,7 @@ function Get-OneNotePageContents {
 function Get-OneNoteSection {
 	[CmdletBinding()]
 	Param(
+		[Parameter(ValueFromPipeline = $True)]
 		[xml]$Hierarchy,
 		[string]$Notebook,
 		[string]$SectionGroup,
@@ -78,6 +81,7 @@ function Get-OneNoteSection {
 function Get-OneNoteSectionGroup {
 	[CmdletBinding()]
 	Param(
+		[Parameter(ValueFromPipeline = $True)]
 		[xml]$Hierarchy,
 		[string]$Notebook,
 		[string]$SectionGroup
