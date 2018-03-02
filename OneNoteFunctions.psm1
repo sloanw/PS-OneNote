@@ -6,6 +6,10 @@ function New-OneNoteSection {
 		[string]$Section
 	)
 
+	If ($Hierarchy -eq $null) {
+		$Hierarchy = Get-OneNoteHierarchy;
+	}
+
 	[System.Xml.XmlNode]$Root = $Hierarchy.ChildNodes.Item(1);
 	$NewSection = $Hierarchy.CreateElement('one', 'Section', $Root.NamespaceURI);
 	$NewSection.SetAttribute('name', $Section);
@@ -27,7 +31,7 @@ function Get-OneNoteHierarchy {
 function Set-OneNoteHierarchy {
 	[CmdletBinding()]
 	Param(
-		[Parameter(ValueFromPipeline = $True)]
+		[Parameter(Mandatory = $True,ValueFromPipeline = $True)]
 		[xml]$Hierarchy
 	)
 
@@ -62,6 +66,16 @@ function Get-OneNotePageContents {
 	Return $PageXML;
 }
 
+function Set-OneNotePageContents {
+	[CmdletBinding()]
+	Param(
+		[Parameter(ValueFromPipeline = $True)]
+		[string]$PageXML
+	)
+	$OneNote = New-Object -ComObject OneNote.Application;
+	$OneNote.UpdatePageContent($PageXML);
+}
+
 function Get-OneNoteSection {
 	[CmdletBinding()]
 	Param(
@@ -71,6 +85,10 @@ function Get-OneNoteSection {
 		[string]$SectionGroup,
 		[string]$SectionName
 	)
+
+	If ($Hierarchy -eq $null) {
+		$Hierarchy = Get-OneNoteHierarchy;
+	}
 
 	$Group = Get-OneNoteSectionGroup -Hierarchy $h -Notebook $Notebook -SectionGroup $SectionGroup;
 
@@ -87,6 +105,10 @@ function Get-OneNoteSectionGroup {
 		[string]$Notebook,
 		[string]$SectionGroup
 	)
+
+	If ($Hierarchy -eq $null) {
+		$Hierarchy = Get-OneNoteHierarchy;
+	}
 
 	$Namespace = New-Object System.Xml.XmlNamespaceManager($Hierarchy.NameTable);
 	[System.Xml.XmlNode]$Root = $Hierarchy.ChildNodes.Item(1);
