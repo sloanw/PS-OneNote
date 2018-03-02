@@ -57,7 +57,7 @@ function Get-OneNotePageContents {
 	$OneNote = New-Object -ComObject OneNote.Application;
 
 	$PageXML = $null;
-	$OneNote.GetPageContents($PageID, [ref] $PageXML);
+	$OneNote.GetPageContent($PageID, [ref] $PageXML);
 
 	Return $PageXML;
 }
