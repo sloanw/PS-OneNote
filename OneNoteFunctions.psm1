@@ -51,6 +51,7 @@ function Add-OneNotePage {
 function Get-OneNotePageContents {
 	[CmdletBinding()]
 	Param(
+		[Parameter(ValueFromPipeline = $True)]
 		[string]$PageID
 	)
 	$OneNote = New-Object -ComObject OneNote.Application;
