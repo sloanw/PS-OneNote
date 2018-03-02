@@ -97,6 +97,25 @@ function Get-OneNoteSection {
 	Return $Section
 }
 
+function Set-OneNotePageTitle {
+	[CmdletBinding()]
+	Param(
+		[Parameter(Mandatory = $True, ValueFromPipeline = $True)]
+		[xml]$PageXML,
+		[string]$PageTitle
+	)
+
+	[System.Xml.XmlNode]$Root = $PageXML.GetElementsByTagName("one:Page")[0];
+	$Namespace = New-Object System.Xml.XmlNamespaceManager($PageXML.NameTable);
+	$Namespace.AddNamespace("one", $root.NamespaceURI);
+	$XPath = "/one:Page/one:Title/one:OE/one:T";
+	
+	[System.Xml.XmlNode]$TitleNode = $PageXML.SelectSingleNode($XPath, $Namespace);
+	$TitleNode.InnerXml = "<![CDATA[$PageTitle]]>";
+
+	Return $PageXML;
+}
+
 function Get-OneNoteSectionGroup {
 	[CmdletBinding()]
 	Param(
