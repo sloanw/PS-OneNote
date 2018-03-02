@@ -46,6 +46,19 @@ function Add-OneNotePage {
 	Return $PageID;
 }
 
+function Get-OneNotePageContents {
+	[CmdletBinding()]
+	Param(
+		[string]$PageID
+	)
+	$OneNote = New-Object -ComObject OneNote.Application;
+
+	$PageXML = $null;
+	$OneNote.GetPageContents($PageID, [ref] $PageXML);
+
+	Return $PageXML;
+}
+
 function Get-OneNoteSection {
 	[CmdletBinding()]
 	Param(
@@ -55,9 +68,11 @@ function Get-OneNoteSection {
 		[string]$SectionName
 	)
 
-	$grp = Get-OneNoteSectionGroup -Hierarchy $h -Notebook $Notebook -SectionGroup $SectionGroup;
+	$Group = Get-OneNoteSectionGroup -Hierarchy $h -Notebook $Notebook -SectionGroup $SectionGroup;
 
-	[System.Xml.XmlNode] $section = $grp.Section | Where-Object { $_.name -eq $SectionName };
+	[System.Xml.XmlNode] $Section = $Group.Section | Where-Object { $_.name -eq $SectionName };
+
+	Return $Section
 }
 
 function Get-OneNoteSectionGroup {
