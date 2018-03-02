@@ -33,6 +33,33 @@ function Set-OneNoteHierarchy {
 	$OneNote.UpdateHierarchy($Hierarchy.OuterXml);
 }
 
+function Add-OneNotePage {
+	[CmdletBinding()]
+	Param(
+		[string]$SectionID
+	)
+	$OneNote = New-Object -ComObject OneNote.Application;
+
+	$PageID = $null;
+	$OneNote.CreateNewPage($SectionID, [ref] $PageID);
+
+	Return $PageID;
+}
+
+function Get-OneNoteSection {
+	[CmdletBinding()]
+	Param(
+		[xml]$Hierarchy,
+		[string]$Notebook,
+		[string]$SectionGroup,
+		[string]$SectionName
+	)
+
+	$grp = Get-OneNoteSectionGroup -Hierarchy $h -Notebook $Notebook -SectionGroup $SectionGroup;
+
+	[System.Xml.XmlNode] $section = $grp.Section | Where-Object { $_.name -eq $SectionName };
+}
+
 function Get-OneNoteSectionGroup {
 	[CmdletBinding()]
 	Param(
@@ -40,7 +67,7 @@ function Get-OneNoteSectionGroup {
 		[string]$Notebook,
 		[string]$SectionGroup
 	)
-	
+
 	$Namespace = New-Object System.Xml.XmlNamespaceManager($Hierarchy.NameTable);
 	[System.Xml.XmlNode]$Root = $Hierarchy.ChildNodes.Item(1);
 	$Namespace.AddNamespace("one", $Root.NamespaceURI);
