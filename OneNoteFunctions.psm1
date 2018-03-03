@@ -39,6 +39,24 @@ function Set-OneNoteHierarchy {
 	$OneNote.UpdateHierarchy($Hierarchy.OuterXml);
 }
 
+function Add-OneNoteOutline {
+	[CmdletBinding()]
+	param (
+		[Parameter(Mandatory = $True)]
+		[string]
+		$PageID
+	)
+	
+	begin {
+	}
+	
+	process {
+	}
+	
+	end {
+	}
+}
+
 function Add-OneNotePage {
 	[CmdletBinding()]
 	Param(
