@@ -42,12 +42,20 @@ function Set-OneNoteHierarchy {
 function Add-OneNotePage {
 	[CmdletBinding()]
 	Param(
-		[string]$SectionID
+		[string]$SectionID,
+		[string]$PageTitle
 	)
 	$OneNote = New-Object -ComObject OneNote.Application;
 
 	$PageID = $null;
 	$OneNote.CreateNewPage($SectionID, [ref] $PageID);
+
+	If ($PageTitle -ne $null) {
+		[xml]$pageXML = Get-OneNotePageContents -PageID $PageID
+		Set-OneNotePageTitle -PageXML $pageXML -PageTitle $PageTitle
+		Set-OneNotePageContents -PageXML $pageXML
+	}
+
 
 	Return $PageID;
 }
@@ -70,8 +78,13 @@ function Set-OneNotePageContents {
 	[CmdletBinding()]
 	Param(
 		[Parameter(ValueFromPipeline = $True)]
-		[string]$PageXML
+		$PageXML
 	)
+
+	If ($pageXML.GetType() -eq [System.Xml.XmlDocument]) {
+		$PageXML = $PageXML.OuterXML;
+	}
+
 	$OneNote = New-Object -ComObject OneNote.Application;
 	$OneNote.UpdatePageContent($PageXML);
 }
