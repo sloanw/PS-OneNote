@@ -1,3 +1,4 @@
+#region Internal Methods
 Function Get-OneNote {
 	[CmdletBinding()]
 	Param (
@@ -82,7 +83,9 @@ function Set-OneNoteHierarchy {
 	end {
 	}
 }
+#endregion
 
+#region Getters
 Function Get-OneNoteNotebook {
 	[CmdletBinding()]
 	Param (
@@ -209,7 +212,9 @@ Function Get-OneNotePage {
 		}
 	}
 }
+#endregion
 
+#region Adders
 Function Add-OneNotePage {
 	[CmdletBinding()]
 	Param (
@@ -241,7 +246,9 @@ Function Add-OneNotePage {
 		Return $PageIDs
 	}
 }
+#endregion
 
+#region PageContents
 function Get-OneNotePageContents {
 	[CmdletBinding()]
 	param (
@@ -269,3 +276,4 @@ function Get-OneNotePageContents {
 		Return $Pages;
 	}
 }
+#endregion
