@@ -121,13 +121,15 @@ Function Get-OneNoteSection {
 		[Parameter(Mandatory = $True)]
 		[string]
 		$Notebook,
+
+		# Name of the section group to look In
+		[string]
+		$SectionGroup,
+
 		# Name of the section to return
 		[Parameter(ValueFromPipeline = $True)]
 		[string[]]
-		$SectionName,
-		# Name of the section group to look In
-		[string]
-		$SectionGroup
+		$SectionName
 	)
 
 	Begin {
@@ -151,8 +153,59 @@ Function Get-OneNoteSection {
 	End {
 		If ( $SectionName.Count -gt 0 ) {
 			Return $Sections;
-		} else {
+		}
+		else {
 			Return $AllSections;
+		}
+	}
+}
+
+Function Get-OneNotePage {
+	[CmdletBinding()]
+	param (
+		# Notebook to search
+		[Parameter(Mandatory = $True)]
+		[string]
+		$Notebook,
+
+		# Name of the section to return
+		[string]
+		$SectionName,
+		
+		# Name of the section group to look In
+		[string]
+		$SectionGroup,
+		
+		# Name of the page to select
+		[Parameter(ValueFromPipeline = $True)]
+		[string[]]
+		$PageName
+	)
+	
+	begin {
+		$Lvl = [Microsoft.Office.Interop.OneNote.HierarchyScope]::hsPages;
+		$XPath = "/one:Notebooks/one:Notebook[@name='$Notebook']/";
+		If ( $SectionGroup -ne $null -and $SectionGroup.Length -gt 0) {
+			$XPath += "one:SectionGroup[@name='$SectionGroup']/"
+		}
+		$XPath += "one:Section[@name='$SectionName']/one:Page";
+
+		[System.Xml.XmlElement[]]$AllPages = Get-HierarchyNodes -Level $Lvl -XPath $XPath;
+		[System.Xml.XmlElement[]]$Pages = @();
+	}
+	
+	process {
+		ForEach ($Name In $PageName) {
+			$Pages += ($AllPages | Where-Object { $_.Name -eq $Name });
+		}
+	}
+	
+	end {
+		If ( $PageName.Count -gt 0 ) {
+			Return $Pages;
+		}
+		else {
+			Return $AllPages;
 		}
 	}
 }

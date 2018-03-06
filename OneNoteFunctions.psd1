@@ -72,6 +72,7 @@
 	FunctionsToExport = @(
 		'Get-OneNoteNotebook',
 		'Get-OneNoteSection',
+		'Get-OneNotePage',
 		'Add-OneNotePage',
 		'Get-OneNotePageContents'
 	)
